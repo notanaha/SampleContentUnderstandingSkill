@@ -1,0 +1,181 @@
+PUT https://<<<search instance>>>.search.windows.net/skillsets/<<<skillset name>>>?api-version=2025-11-01-Preview
+api-key: <<<search-api-key>>>
+Content-Type: application/json
+
+{
+  "name": "<<<skillset name>>>",
+  "description": "Skillset for knowledge source 'ks-disneymap-user-guide'",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Util.ContentUnderstandingSkill",
+      "name": "contentUnderstandingSkill",
+      "context": "/document",
+      "extractionOptions": [
+        "images",
+        "locationMetadata"
+      ],
+      "inputs": [
+        {
+          "name": "file_data",
+          "source": "/document/file_data",
+          "inputs": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text_sections",
+          "targetName": "text_sections"
+        },
+        {
+          "name": "normalized_images",
+          "targetName": "normalized_images"
+        }
+      ],
+      "chunkingProperties": {
+        "unit": "characters",
+        "maximumLength": 2000,
+        "overlapLength": 200
+      }
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "AzureOpenAIEmbeddingSkill",
+      "description": "Generate embeddings",
+      "context": "/document/text_sections/*",
+      "resourceUri": "https://<<<foundry name>>>.openai.azure.com",
+      "apiKey": "<<<api-key>>>",
+      "deploymentId": "text-embedding-3-large",
+      "dimensions": 3072,
+      "modelName": "text-embedding-3-large",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/text_sections/*/content",
+          "inputs": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "text_vector"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Custom.ChatCompletionSkill",
+      "name": "GenAISkill",
+      "description": "Generate chat responses for image verbalization",
+      "context": "/document/normalized_images/*",
+      "uri": "https://<<<foundry name>>>.openai.azure.com/openai/deployments/<<<deployment name>>>/chat/completions?api-version=2024-10-21",
+      "httpMethod": "POST",
+      "timeout": "PT1M",
+      "batchSize": 1,
+      "apiKey": "<<<api-key>>>",
+      "inputs": [
+        {
+          "name": "systemMessage",
+          "source": "='You are tasked with generating concise and accurate descriptions of images, figures, diagrams, or charts in documents. When a document contains a map, include information about the nearest positional relationships between numbered items within the map area (i.e., only those located in the green area). For example, note that numbers 60, 63, and 53 are located near number 52. For the numbered labels on the map, describe their relative positions in a systematic order, scanning from left to right and then from top to bottom. All descriptions must be written in Japanese.'",
+          "inputs": []
+        },
+        {
+          "name": "userMessage",
+          "source": "='Please describe this image.'",
+          "inputs": []
+        },
+        {
+          "name": "image",
+          "source": "/document/normalized_images/*/data",
+          "inputs": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "response",
+          "targetName": "verbalizedImage"
+        }
+      ],
+      "httpHeaders": {}
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "VerbalizedImageAzureOpenAIEmbeddingSkill",
+      "description": "Generate embeddings",
+      "context": "/document/normalized_images/*",
+      "resourceUri": "https://<<<foundry name>>>.openai.azure.com",
+      "apiKey": "<<<api-key>>>",
+      "deploymentId": "text-embedding-3-large",
+      "dimensions": 3072,
+      "modelName": "text-embedding-3-large",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/normalized_images/*/verbalizedImage",
+          "inputs": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "verbalizedImage_vector"
+        }
+      ]
+    }
+  ],
+  "cognitiveServices": {
+    "@odata.type": "#Microsoft.Azure.Search.AIServicesByKey",
+    "description": "AI Services for knowledge source",
+    "key": "<<<api-key>>>",
+    "subdomainUrl": "https://<<<foundry name for CU>>>.services.ai.azure.com"
+  },
+  "indexProjections": {
+    "selectors": [
+      {
+        "targetIndexName": "ks-disneymap-user-guide-index",
+        "parentKeyFieldName": "snippet_parent_id",
+        "sourceContext": "/document/text_sections/*",
+        "mappings": [
+          {
+            "name": "snippet_vector",
+            "source": "/document/text_sections/*/text_vector",
+            "inputs": []
+          },
+          {
+            "name": "snippet",
+            "source": "/document/text_sections/*/content",
+            "inputs": []
+          },
+          {
+            "name": "blob_url",
+            "source": "/document/blob_url",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "targetIndexName": "ks-disneymap-user-guide-index",
+        "parentKeyFieldName": "image_snippet_parent_id",
+        "sourceContext": "/document/normalized_images/*",
+        "mappings": [
+          {
+            "name": "snippet_vector",
+            "source": "/document/normalized_images/*/verbalizedImage_vector",
+            "inputs": []
+          },
+          {
+            "name": "snippet",
+            "source": "/document/normalized_images/*/verbalizedImage",
+            "inputs": []
+          },
+          {
+            "name": "blob_url",
+            "source": "/document/blob_url",
+            "inputs": []
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "projectionMode": "skipIndexingParentDocuments"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+PUT https://<<<search instance>>>.search.windows.net/indexers/<<<indexer name>>>?api-version=2025-11-01-Preview
+api-key: <<<search-api-key>>>
+Content-Type: application/json
+
+{
+  "name": "<<<indexer name>>>",
+  "description": "Indexer for knowledge source 'ks-disneymap-user-guide'",
+  "dataSourceName": "<<<data source name>>>",
+  "skillsetName": "<<<skillset name>>>",
+  "targetIndexName": "<<<index name>>>",
+  "disabled": false,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "configuration": {
+      "dataToExtract": "contentAndMetadata",
+      "parsingMode": "default",
+      "allowSkillsetToReadFileData": true
+    }
+  },
+  "fieldMappings": [
+    {
+      "sourceFieldName": "metadata_storage_path",
+      "targetFieldName": "blob_url",
+      "mappingFunction": null
+    }
+  ],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+}

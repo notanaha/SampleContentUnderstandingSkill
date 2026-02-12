@@ -1,0 +1,8 @@
+POST https://<<<search instance>>>.search.windows.net/indexes/<<<index name>>>/docs/search?api-version=2025-11-01-Preview
+api-key: <<<search-api-key>>>
+Content-Type: application/json
+
+{
+  "search": "*",
+  "select": "snippet"
+}

@@ -1,0 +1,22 @@
+PUT https://<<<search instance>>>.search.windows.net/datasources/<<<data source name>>>?api-version=2025-11-01-Preview
+api-key: <<<search-api-key>>>
+Content-Type: application/json
+
+{
+  "name": "<<<data source name>>>",
+  "description": "Data source for knowledge source 'ks-disneymap-user-guide'",
+  "type": "azureblob",
+  "subtype": null,
+  "indexerPermissionOptions": [],
+  "credentials": {
+    "connectionString": "<<<connection string>>>"
+  },
+  "container": {
+    "name": "disneyland-map",
+    "query": null
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

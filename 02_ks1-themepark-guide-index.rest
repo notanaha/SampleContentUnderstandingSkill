@@ -1,0 +1,163 @@
+PUT https://<<<search instance>>>.search.windows.net/indexes/<<<index name>>>?api-version=2025-11-01-Preview
+api-key: <<<search-api-key>>>
+Content-Type: application/json
+
+{
+  "name": "<<<index name>>>",
+  "description": "Search index for knowledge source 'ks-disneymap-user-guide'",
+  "purviewEnabled": false,
+  "fields": [
+    {
+      "name": "uid",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": false,
+      "retrievable": true,
+      "stored": true,
+      "sortable": true,
+      "facetable": false,
+      "key": true,
+      "analyzer": "keyword",
+      "synonymMaps": []
+    },
+    {
+      "name": "snippet_parent_id",
+      "type": "Edm.String",
+      "searchable": false,
+      "filterable": true,
+      "retrievable": true,
+      "stored": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "synonymMaps": []
+    },
+    {
+      "name": "blob_url",
+      "type": "Edm.String",
+      "searchable": false,
+      "filterable": true,
+      "retrievable": true,
+      "stored": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "synonymMaps": []
+    },
+    {
+      "name": "snippet",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": false,
+      "retrievable": true,
+      "stored": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "analyzer": "ja.microsoft",
+      "synonymMaps": []
+    },
+    {
+      "name": "image_snippet_parent_id",
+      "type": "Edm.String",
+      "searchable": false,
+      "filterable": true,
+      "retrievable": true,
+      "stored": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "synonymMaps": []
+    },
+    {
+      "name": "snippet_vector",
+      "type": "Collection(Edm.Single)",
+      "searchable": true,
+      "filterable": false,
+      "retrievable": true,
+      "stored": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "dimensions": 3072,
+      "vectorSearchProfile": "ks-disneymap-user-guide-vector-search-profile",
+      "synonymMaps": []
+    }
+  ],
+  "scoringProfiles": [],
+  "suggesters": [],
+  "analyzers": [],
+  "normalizers": [],
+  "tokenizers": [],
+  "tokenFilters": [],
+  "charFilters": [],
+  "similarity": {
+    "@odata.type": "#Microsoft.Azure.Search.BM25Similarity"
+  },
+  "semantic": {
+    "defaultConfiguration": "ks-disneymap-user-guide-semantic-configuration",
+    "configurations": [
+      {
+        "name": "ks-disneymap-user-guide-semantic-configuration",
+        "flightingOptIn": false,
+        "rankingOrder": "BoostedRerankerScore",
+        "prioritizedFields": {
+          "prioritizedContentFields": [
+            {
+              "fieldName": "snippet"
+            }
+          ],
+          "prioritizedKeywordsFields": []
+        }
+      }
+    ]
+  },
+  "vectorSearch": {
+    "algorithms": [
+      {
+        "name": "ks-disneymap-user-guide-vector-search-algorithm",
+        "kind": "hnsw",
+        "hnswParameters": {
+          "metric": "cosine",
+          "m": 4,
+          "efConstruction": 400,
+          "efSearch": 500
+        }
+      }
+    ],
+    "profiles": [
+      {
+        "name": "ks-disneymap-user-guide-vector-search-profile",
+        "algorithm": "ks-disneymap-user-guide-vector-search-algorithm",
+        "vectorizer": "ks-disneymap-user-guide-vectorizer",
+        "compression": "ks-disneymap-user-guide-vector-search-scalar-quantization"
+      }
+    ],
+    "vectorizers": [
+      {
+        "name": "ks-disneymap-user-guide-vectorizer",
+        "kind": "azureOpenAI",
+        "azureOpenAIParameters": {
+          "resourceUri": "https://<<<foundry name>>>.openai.azure.com",
+          "deploymentId": "text-embedding-3-large",
+          "apiKey": "<<<api-key>>>",
+          "modelName": "text-embedding-3-large"
+        }
+      }
+    ],
+    "compressions": [
+      {
+        "name": "ks-disneymap-user-guide-vector-search-scalar-quantization",
+        "kind": "scalarQuantization",
+        "scalarQuantizationParameters": {
+          "quantizedDataType": "int8"
+        },
+        "rescoringOptions": {
+          "enableRescoring": true,
+          "defaultOversampling": 4,
+          "rescoreStorageMethod": "preserveOriginals"
+        }
+      }
+    ]
+  }
+}
