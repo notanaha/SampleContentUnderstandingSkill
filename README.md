@@ -14,20 +14,6 @@ The REST files should be executed in order:
 | `04_ks1-themepark-guide-indexer.rest` | Creates the indexer to process documents |
 | `99_themepark-query.rest` | Sample query to test the index |
 
-## Architecture
-
-```
-Azure Blob Storage → Content Understanding Skill → Chunking + Image Extraction
-                                                        ↓
-                                    Text Embedding (text-embedding-3-large)
-                                                        ↓
-                                    Image Verbalization (ChatCompletionSkill)
-                                                        ↓
-                                    Image Embedding (text-embedding-3-large)
-                                                        ↓
-                                            AI Search Index
-```
-
 ## Prerequisites
 
 - Azure AI Search service (2025-11-01-Preview API)
