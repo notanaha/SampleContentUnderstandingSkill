@@ -1,0 +1,8 @@
+python-dotenv
+azure-identity
+azure-mgmt-core
+azure-core
+azure-search-documents
+azure-ai-projects
+azure-mgmt-cognitiveservices
+requests
