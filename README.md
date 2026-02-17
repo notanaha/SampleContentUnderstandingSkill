@@ -132,6 +132,7 @@ Copy `sample.env` to `.env` and set the following variables:
 - **Content Understanding Skill**: Extracts text sections and images from documents
 - **Text Chunking**: 2000 characters with 200 character overlap
 - **Image Verbalization**: Uses GPT model to generate text descriptions of images
+- **Japanese Analyzer**: `snippet` field uses `ja.microsoft` analyzer for Japanese-language tokenization
 - **Vector Search**: 3072-dimensional embeddings with HNSW algorithm and scalar quantization
 - **Semantic Search**: BM25 similarity with semantic ranking
 - **Agentic Retrieval**: Knowledge base–driven retrieval with intelligent query planning
@@ -153,6 +154,12 @@ The `retrieval_instructions` on `kb2` guide the knowledge base on which knowledg
 ### 3. Agent `instructions` (`101_knowledge_base.ipynb` — Create Agent )
 
 The `instructions` passed to the Foundry Agent describe how to use the knowledge base tool.
+
+## Analyzer Configuration
+
+The index definition (`02_ks1-themepark-guide-index.rest`) specifies `"analyzer": "ja.microsoft"` on the `snippet` field. This is the Microsoft Japanese language analyzer, which provides morphological analysis optimized for Japanese text. It correctly tokenizes Japanese sentences — which do not use spaces between words — enabling accurate full-text search.
+
+If the target documents are in a different language, change the analyzer to the appropriate one (e.g., `en.microsoft` for English). See [Language analyzers in Azure AI Search](https://learn.microsoft.com/azure/search/index-add-language-analyzers) for the full list of supported analyzers.
 
 ## API Version
 
