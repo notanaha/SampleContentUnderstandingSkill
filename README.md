@@ -55,21 +55,44 @@ The notebook walks through:
 
 ### REST Files
 
-Replace the following variables (marked as `<<<variable>>>`) in the REST files:
+Each REST file defines variables at the top using `@variable=value` syntax (VS Code REST Client format). Edit the variable values at the top of each file before executing requests.
 
-| Variable | Description | Used In |
-|----------|-------------|---------|
-| `<<<search instance>>>` | Azure AI Search instance name (e.g., `mysearch`) | All files |
-| `<<<search-api-key>>>` | Azure AI Search admin API key | All files |
-| `<<<data source name>>>` | Name for the data source | 01, 04 |
-| `<<<connection string>>>` | Azure Blob Storage connection string | 01 |
-| `<<<index name>>>` | Name for the search index | 02, 04, 99 |
-| `<<<skillset name>>>` | Name for the skillset | 03, 04 |
-| `<<<indexer name>>>` | Name for the indexer | 04 |
-| `<<<foundry name>>>` | Azure OpenAI resource name | 02, 03 |
-| `<<<api-key>>>` | Azure OpenAI API key | 02, 03 |
-| `<<<deployment name>>>` | Azure OpenAI chat model deployment name | 03 |
-| `<<<foundry name for CU>>>` | Azure AI Services resource name for Content Understanding | 03 |
+#### Common Variables (All Files)
+
+| Variable | Description |
+|----------|-------------|
+| `@api-key` | Azure AI Search admin API key |
+| `@uri-host` | Azure AI Search host name (e.g., `mysearch.search.windows.net`) |
+| `@api-version` | API version (default: `2025-11-01-Preview`) |
+| `@name-prefix` | Prefix for all resource names (e.g., `ks-disneymap-user-guide`). Changing this updates all derived resource names automatically |
+
+#### 01 — Datasource
+
+| Variable | Description |
+|----------|-------------|
+| `@blob-connection-string` | Azure Blob Storage connection string (Managed Identity format) |
+| `@blob-container-name` | Blob container name containing the documents |
+
+#### 02 — Index
+
+| Variable | Description |
+|----------|-------------|
+| `@aoai-endpoint` | Azure OpenAI endpoint URL |
+| `@aoai-key` | Azure OpenAI API key |
+
+#### 03 — Skillset
+
+| Variable | Description |
+|----------|-------------|
+| `@aoai-endpoint` | Azure OpenAI endpoint URL |
+| `@aoai-key` | Azure OpenAI API key |
+| `@chat-deployment-name` | Azure OpenAI chat model deployment name (e.g., `gpt-5`) |
+| `@ai-endpoint` | Azure AI Services endpoint (for Content Understanding) |
+| `@ai-key` | Azure AI Services API key |
+
+#### 04 — Indexer
+
+No additional variables beyond common ones. All resource names are derived from `@name-prefix`.
 
 ### Notebook
 
@@ -90,7 +113,7 @@ Copy `sample.env` to `.env` and set the following variables:
 ### REST Files
 
 1. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension for VS Code
-2. Replace all `<<<variable>>>` placeholders with your actual values
+2. Open each `.rest` file and update the `@variable=value` definitions at the top with your actual values
 3. Execute each `.rest` file in numerical order by clicking "Send Request"
 4. After the indexer completes, use `99_themepark-query.rest` to test queries
 

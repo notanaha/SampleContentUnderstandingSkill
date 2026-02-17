@@ -1,13 +1,24 @@
-PUT https://<<<search instance>>>.search.windows.net/indexers/<<<indexer name>>>?api-version=2025-11-01-Preview
-api-key: <<<search-api-key>>>
+@api-key=<AI Search API Key>
+@uri-host=<AI Search Endpoint Host>
+@api-version=2025-11-01-Preview
+
+@name-prefix=<Name Prefix>
+@indexer-name={{name-prefix}}-indexer
+@data-source-name={{name-prefix}}-datasource
+@skillset-name={{name-prefix}}-skillset
+@index-name={{name-prefix}}-index
+
+### Create indexer
+PUT https://{{uri-host}}/indexers/{{indexer-name}}?api-version={{api-version}}
+api-key: {{api-key}}
 Content-Type: application/json
 
 {
-  "name": "<<<indexer name>>>",
-  "description": "Indexer for knowledge source 'ks-disneymap-user-guide'",
-  "dataSourceName": "<<<data source name>>>",
-  "skillsetName": "<<<skillset name>>>",
-  "targetIndexName": "<<<index name>>>",
+  "name": "{{indexer-name}}",
+  "description": "Indexer for knowledge source '{{name-prefix}}'",
+  "dataSourceName": "{{data-source-name}}",
+  "skillsetName": "{{skillset-name}}",
+  "targetIndexName": "{{index-name}}",
   "disabled": false,
   "schedule": null,
   "parameters": {

@@ -1,18 +1,29 @@
-PUT https://<<<search instance>>>.search.windows.net/datasources/<<<data source name>>>?api-version=2025-11-01-Preview
-api-key: <<<search-api-key>>>
+@api-key=<AI Search API Key>
+@uri-host=<AI Search Endpoint Host>
+@api-version=2025-11-01-Preview
+
+@name-prefix=<Name Prefix>
+@data-source-name={{name-prefix}}-datasource
+
+@blob-connection-string=<Blob Storage Connection String>
+@blob-container-name=<Blob Storage Container Name>
+
+### Create datasource
+PUT https://{{uri-host}}/datasources/{{data-source-name}}?api-version={{api-version}}
+api-key: {{api-key}}
 Content-Type: application/json
 
 {
-  "name": "<<<data source name>>>",
-  "description": "Data source for knowledge source 'ks-disneymap-user-guide'",
+  "name": "{{data-source-name}}",
+  "description": "Data source for knowledge source '{{name-prefix}}'",
   "type": "azureblob",
   "subtype": null,
   "indexerPermissionOptions": [],
   "credentials": {
-    "connectionString": "<<<connection string>>>"
+    "connectionString": "{{blob-connection-string}}"
   },
   "container": {
-    "name": "disneyland-map",
+    "name": "{{blob-container-name}}",
     "query": null
   },
   "dataChangeDetectionPolicy": null,

@@ -1,10 +1,21 @@
-PUT https://<<<search instance>>>.search.windows.net/indexes/<<<index name>>>?api-version=2025-11-01-Preview
-api-key: <<<search-api-key>>>
+@api-key=<AI Search API Key>
+@uri-host=<AI Search Endpoint Host>
+@api-version=2025-11-01-Preview
+
+@name-prefix=<Name Prefix>
+@index-name={{name-prefix}}-index
+
+@aoai-endpoint=<AOAI Endpoint>
+@aoai-key=<AOAI Key>
+
+### Create index
+PUT https://{{uri-host}}/indexes/{{index-name}}?api-version={{api-version}}
+api-key: {{api-key}}
 Content-Type: application/json
 
 {
-  "name": "<<<index name>>>",
-  "description": "Search index for knowledge source 'ks-disneymap-user-guide'",
+  "name": "{{index-name}}",
+  "description": "Search index for knowledge source '{{name-prefix}}'",
   "purviewEnabled": false,
   "fields": [
     {
@@ -80,7 +91,7 @@ Content-Type: application/json
       "facetable": false,
       "key": false,
       "dimensions": 3072,
-      "vectorSearchProfile": "ks-disneymap-user-guide-vector-search-profile",
+      "vectorSearchProfile": "{{name-prefix}}-vector-search-profile",
       "synonymMaps": []
     }
   ],
@@ -95,10 +106,10 @@ Content-Type: application/json
     "@odata.type": "#Microsoft.Azure.Search.BM25Similarity"
   },
   "semantic": {
-    "defaultConfiguration": "ks-disneymap-user-guide-semantic-configuration",
+    "defaultConfiguration": "{{name-prefix}}-semantic-configuration",
     "configurations": [
       {
-        "name": "ks-disneymap-user-guide-semantic-configuration",
+        "name": "{{name-prefix}}-semantic-configuration",
         "flightingOptIn": false,
         "rankingOrder": "BoostedRerankerScore",
         "prioritizedFields": {
@@ -115,7 +126,7 @@ Content-Type: application/json
   "vectorSearch": {
     "algorithms": [
       {
-        "name": "ks-disneymap-user-guide-vector-search-algorithm",
+        "name": "{{name-prefix}}-vector-search-algorithm",
         "kind": "hnsw",
         "hnswParameters": {
           "metric": "cosine",
@@ -127,27 +138,27 @@ Content-Type: application/json
     ],
     "profiles": [
       {
-        "name": "ks-disneymap-user-guide-vector-search-profile",
-        "algorithm": "ks-disneymap-user-guide-vector-search-algorithm",
-        "vectorizer": "ks-disneymap-user-guide-vectorizer",
-        "compression": "ks-disneymap-user-guide-vector-search-scalar-quantization"
+        "name": "{{name-prefix}}-vector-search-profile",
+        "algorithm": "{{name-prefix}}-vector-search-algorithm",
+        "vectorizer": "{{name-prefix}}-vectorizer",
+        "compression": "{{name-prefix}}-vector-search-scalar-quantization"
       }
     ],
     "vectorizers": [
       {
-        "name": "ks-disneymap-user-guide-vectorizer",
+        "name": "{{name-prefix}}-vectorizer",
         "kind": "azureOpenAI",
         "azureOpenAIParameters": {
-          "resourceUri": "https://<<<foundry name>>>.openai.azure.com",
+          "resourceUri": "{{aoai-endpoint}}",
           "deploymentId": "text-embedding-3-large",
-          "apiKey": "<<<api-key>>>",
+          "apiKey": "{{aoai-key}}",
           "modelName": "text-embedding-3-large"
         }
       }
     ],
     "compressions": [
       {
-        "name": "ks-disneymap-user-guide-vector-search-scalar-quantization",
+        "name": "{{name-prefix}}-vector-search-scalar-quantization",
         "kind": "scalarQuantization",
         "scalarQuantizationParameters": {
           "quantizedDataType": "int8"
