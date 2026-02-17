@@ -115,6 +115,22 @@ Copy `sample.env` to `.env` and set the following variables:
 - **MCP Integration**: Model Context Protocol tool connecting Foundry Agent Service to Azure AI Search
 - **Web Knowledge Source**: Augment index-based retrieval with live web search
 
+## Prompt Tuning Notes
+
+This solution includes prompt tuning at the following three points.
+
+### 1. Image Verbalization Prompt (`03_ks1-themepark-guide-skillset.rest` L77)
+
+The `systemMessage` in the `ChatCompletionSkill` is tuned to extract structured information from images.
+
+### 2. Knowledge Base `retrieval_instructions` (`101_knowledge_base.ipynb` — Create Knowledge Base )
+
+The `retrieval_instructions` on `kb2` guide the knowledge base on which knowledge source to select.
+
+### 3. Agent `instructions` (`101_knowledge_base.ipynb` — Create Agent )
+
+The `instructions` passed to the Foundry Agent describe how to use the knowledge base tool.
+
 ## API Version
 
 All REST calls use Azure AI Search API version `2025-11-01-Preview`.

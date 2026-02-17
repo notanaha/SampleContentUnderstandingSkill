@@ -1,8 +1,8 @@
 python-dotenv
 azure-identity
-azure-mgmt-core
 azure-core
-azure-search-documents
+azure-search-documents --pre
+azure-mgmt-core
 azure-ai-projects
 azure-mgmt-cognitiveservices
 requests
