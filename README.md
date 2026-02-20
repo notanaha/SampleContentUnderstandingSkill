@@ -55,44 +55,32 @@ The notebook walks through:
 
 ### REST Files
 
-Each REST file defines variables at the top using `@variable=value` syntax (VS Code REST Client format). Edit the variable values at the top of each file before executing requests.
+REST files automatically load variables from the `.env` file using the `{{$dotenv VARIABLE_NAME}}` syntax (VS Code REST Client format).
 
-#### Common Variables (All Files)
+**Setup Instructions:**
 
-| Variable | Description |
+1. Copy `sample.env` to `.env`:
+   ```bash
+   cp sample.env .env
+   ```
+
+2. Edit `.env` and set the following values with your Azure resource details:
+
+| Environment Variable | Description |
 |----------|-------------|
-| `@api-key` | Azure AI Search admin API key |
-| `@uri-host` | Azure AI Search host name (e.g., `mysearch.search.windows.net`) |
-| `@api-version` | API version (default: `2025-11-01-Preview`) |
-| `@name-prefix` | Prefix for all resource names (e.g., `ks-disneymap-user-guide`). Changing this updates all derived resource names automatically |
+| `AZURE_SEARCH_API_KEY` | Azure AI Search admin API key |
+| `AZURE_SEARCH_ENDPOINT` | Azure AI Search endpoint (e.g., `https://mysearch.search.windows.net`) |
+| `AZURE_OPENAI_ENDPOINT` | Azure OpenAI endpoint URL (can be a different Foundry account from AI Services) |
+| `AZURE_OPENAI_API_KEY` | Azure OpenAI API key |
+| `AI_SERVICES_URL` | Azure AI Services endpoint for Content Understanding (can be a different Foundry account from Azure OpenAI) |
+| `AI_SERVICES_KEY` | Azure AI Services API key |
+| `AZURE_BLOB_CONNECTION_STRING` | Azure Blob Storage connection string |
+| `AZURE_BLOB_CONTAINER_NAME` | Blob container name containing the documents |
 
-#### 01 — Datasource
+> **Note:** `AZURE_OPENAI_ENDPOINT` and `AI_SERVICES_URL` are kept separate intentionally.
+> AI Services (Content Understanding) may have region availability restrictions, so you can deploy Azure OpenAI on a different Foundry account without being constrained by those limitations.
 
-| Variable | Description |
-|----------|-------------|
-| `@blob-connection-string` | Azure Blob Storage connection string (Managed Identity format) |
-| `@blob-container-name` | Blob container name containing the documents |
-
-#### 02 — Index
-
-| Variable | Description |
-|----------|-------------|
-| `@aoai-endpoint` | Azure OpenAI endpoint URL |
-| `@aoai-key` | Azure OpenAI API key |
-
-#### 03 — Skillset
-
-| Variable | Description |
-|----------|-------------|
-| `@aoai-endpoint` | Azure OpenAI endpoint URL |
-| `@aoai-key` | Azure OpenAI API key |
-| `@chat-deployment-name` | Azure OpenAI chat model deployment name (e.g., `gpt-5`) |
-| `@ai-endpoint` | Azure AI Services endpoint (for Content Understanding) |
-| `@ai-key` | Azure AI Services API key |
-
-#### 04 — Indexer
-
-No additional variables beyond common ones. All resource names are derived from `@name-prefix`.
+The REST files will automatically read these values from `.env` file without any hardcoding, so you won't need to modify variable values in the REST files themselves.
 
 ### Notebook
 
@@ -113,9 +101,14 @@ Copy `sample.env` to `.env` and set the following variables:
 ### REST Files
 
 1. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension for VS Code
-2. Open each `.rest` file and update the `@variable=value` definitions at the top with your actual values
-3. Execute each `.rest` file in numerical order by clicking "Send Request"
-4. After the indexer completes, use `99_themepark-query.rest` to test queries
+2. Create a `.env` file by copying `sample.env`:
+   ```bash
+   cp sample.env .env
+   ```
+3. Open `.env` and fill in your Azure resource endpoints and API keys
+4. Open each `.rest` file (they will automatically use values from `.env`)
+5. Execute each `.rest` file in numerical order by clicking "Send Request"
+6. After the indexer completes, use `99_themepark-query.rest` to test queries
 
 ### Notebook
 
