@@ -1,12 +1,12 @@
-@api-key=<AI Search API Key>
-@uri-host=<AI Search Endpoint Host>
+@api-key={{$dotenv AZURE_SEARCH_API_KEY}}
+@uri-host={{$dotenv AZURE_SEARCH_ENDPOINT}}
 @api-version=2025-11-01-Preview
 
 @name-prefix=<Name Prefix>
 @index-name={{name-prefix}}-index
 
 ### Search query
-POST https://{{uri-host}}/indexes/{{index-name}}/docs/search?api-version={{api-version}}
+POST {{uri-host}}/indexes/{{index-name}}/docs/search?api-version={{api-version}}
 api-key: {{api-key}}
 Content-Type: application/json
 

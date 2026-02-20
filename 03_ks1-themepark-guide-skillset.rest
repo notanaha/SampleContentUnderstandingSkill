@@ -1,20 +1,20 @@
-@api-key=<AI Search API Key>
-@uri-host=<AI Search Endpoint Host>
+@api-key={{$dotenv AZURE_SEARCH_API_KEY}}
+@uri-host={{$dotenv AZURE_SEARCH_ENDPOINT}}
 @api-version=2025-11-01-Preview
 
-@name-prefix=<Name Prefix>
+@name-prefix=ks-disneylandmap-demo
 @skillset-name={{name-prefix}}-skillset
 @index-name={{name-prefix}}-index
 
-@aoai-endpoint=<AOAI Endpoint>
-@aoai-key=<AOAI Key>
-@chat-deployment-name=<Chat Deployment Name>
+@aoai-endpoint={{$dotenv AZURE_OPENAI_ENDPOINT}}
+@aoai-key={{$dotenv FOUNDRY_API_KEY}}
+@chat-deployment-name=gpt-5.2-chat
 
-@ai-endpoint=<AI Service Endpoint>
-@ai-key=<AI Service API Key>
+@ai-endpoint={{$dotenv AI_SERVICES_URL}}
+@ai-key={{$dotenv FOUNDRY_API_KEY}}
 
 ### Create skillset
-PUT https://{{uri-host}}/skillsets/{{skillset-name}}?api-version={{api-version}}
+PUT {{uri-host}}/skillsets/{{skillset-name}}?api-version={{api-version}}
 api-key: {{api-key}}
 Content-Type: application/json
 
