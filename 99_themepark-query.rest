@@ -12,5 +12,18 @@ Content-Type: application/json
 
 {
   "search": "*",
+  "filter": "image_snippet_parent_id ne null",
+  "select": "snippet"
+}
+
+
+### Search query
+POST https://{{uri-host}}/indexes/{{index-name}}/docs/search?api-version={{api-version}}
+api-key: {{api-key}}
+Content-Type: application/json
+
+{
+  "search": "*",
+  "filter": "snippet_parent_id ne null",
   "select": "snippet"
 }
