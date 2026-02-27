@@ -1,15 +1,15 @@
-@api-key=<AI Search API Key>
-@uri-host=<AI Search Endpoint Host>
+@api-key={{$dotenv AZURE_SEARCH_API_KEY}}
+@uri-host={{$dotenv AZURE_SEARCH_ENDPOINT}}
 @api-version=2025-11-01-Preview
 
-@name-prefix=<Name Prefix>
+@name-prefix=ks-disneylandmap-demo
 @data-source-name={{name-prefix}}-datasource
 
-@blob-connection-string=<Blob Storage Connection String>
-@blob-container-name=<Blob Storage Container Name>
+@blob-connection-string={{$dotenv AZURE_BLOB_CONNECTION_STRING}}
+@blob-container-name={{$dotenv AZURE_BLOB_CONTAINER_NAME}}
 
 ### Create datasource
-PUT https://{{uri-host}}/datasources/{{data-source-name}}?api-version={{api-version}}
+PUT {{uri-host}}/datasources/{{data-source-name}}?api-version={{api-version}}
 api-key: {{api-key}}
 Content-Type: application/json
 

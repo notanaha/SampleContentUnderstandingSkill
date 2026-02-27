@@ -6,3 +6,4 @@ streamlit/downloads/**
 **/.env
 *.amltmp
 .amlignore
+_*.md
